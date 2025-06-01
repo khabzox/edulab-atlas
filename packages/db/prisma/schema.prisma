@@ -1,0 +1,152 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum UserRole {
+  STUDENT
+  TEACHER
+  ADMIN
+}
+
+enum Language {
+  EN
+  AR
+  FR
+}
+
+enum Stream {
+  SCIENCE
+  ARTS
+  COMMERCE
+}
+
+enum Difficulty {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+}
+
+model User {
+  id               String         @id @default(cuid())
+  email            String         @unique
+  role             UserRole       @default(STUDENT)
+  grade            Int?
+  preferredLanguage Language      @default(EN)
+  stream           Stream?
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+  progress         UserProgress[]
+  quizAttempts     QuizAttempt[]
+}
+
+model Subject {
+  id          String   @id @default(cuid())
+  name        String
+  nameAr      String
+  nameFr      String
+  description String?  @db.Text
+  order       Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  lessons     Lesson[]
+}
+
+model Lesson {
+  id          String         @id @default(cuid())
+  title       String
+  titleAr     String
+  titleFr     String
+  content     Json
+  subjectId   String
+  difficulty  Difficulty     @default(BEGINNER)
+  duration    Int           // in minutes
+  order       Int
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  subject     Subject        @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  progress    UserProgress[]
+  quiz        Quiz?
+}
+
+model Quiz {
+  id          String         @id @default(cuid())
+  lessonId    String         @unique
+  title       String
+  titleAr     String
+  titleFr     String
+  description String?        @db.Text
+  timeLimit   Int?          // in minutes
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  lesson      Lesson         @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  questions   Question[]
+  attempts    QuizAttempt[]
+}
+
+model Question {
+  id          String         @id @default(cuid())
+  quizId      String
+  type        String        // MCQ, TrueFalse, ShortAnswer, etc.
+  question    String        @db.Text
+  questionAr  String        @db.Text
+  questionFr  String        @db.Text
+  options     Json?         // Array of options for MCQ
+  answer      String        @db.Text
+  points      Int           @default(1)
+  explanation String?       @db.Text
+  order       Int
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  quiz        Quiz          @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  responses   Response[]
+}
+
+model QuizAttempt {
+  id        String     @id @default(cuid())
+  userId    String
+  quizId    String
+  score     Int
+  startedAt DateTime   @default(now())
+  endedAt   DateTime?
+  responses Response[]
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  quiz      Quiz       @relation(fields: [quizId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([quizId])
+}
+
+model Response {
+  id            String      @id @default(cuid())
+  attemptId     String
+  questionId    String
+  answer        String      @db.Text
+  isCorrect     Boolean
+  points        Int
+  attempt       QuizAttempt @relation(fields: [attemptId], references: [id], onDelete: Cascade)
+  question      Question    @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@index([attemptId])
+  @@index([questionId])
+}
+
+model UserProgress {
+  id        String   @id @default(cuid())
+  userId    String
+  lessonId  String
+  completed Boolean  @default(false)
+  progress  Int      @default(0)
+  startedAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lesson    Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, lessonId])
+  @@index([userId])
+  @@index([lessonId])
+} 
