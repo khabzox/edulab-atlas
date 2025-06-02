@@ -1,84 +1,192 @@
-# Turborepo starter
+# EduLab Atlas 🎓
 
-This Turborepo starter is maintained by the Turborepo core team.
+A modern educational platform built for Moroccan students, providing a comprehensive learning experience with advanced features and intuitive design.
 
-## Using this example
+## ✨ Features
 
-Run the following command:
+- 📚 **Rich Content Management**: Support for various educational content types
+- 🔍 **Smart Search**: Advanced search functionality for educational resources
+- 👥 **User Profiles**: Customizable student and teacher profiles
+- 📊 **Progress Tracking**: Detailed learning progress analytics
+- 💬 **Interactive Learning**: Real-time collaboration tools
+- 📱 **Responsive Design**: Works seamlessly on all devices
+- 🌙 **Dark Mode**: Eye-friendly dark theme support
+- 🔐 **Secure Authentication**: Robust user authentication system
 
-```sh
-npx create-turbo@latest
+## 🚀 Tech Stack
+
+### Frontend
+- **Framework**: Next.js 14 with App Router & React 18
+- **Styling**: Tailwind CSS with custom theme
+- **Components**: Shadcn UI for consistent design
+- **State Management**: Zustand for efficient state handling
+- **Forms**: React Hook Form with Zod validation
+- **Data Fetching**: TanStack Query v5
+- **Animations**: Framer Motion
+
+### Backend
+- **API**: Next.js API Routes & tRPC
+- **Database**: Prisma with PostgreSQL
+- **Authentication**: NextAuth.js with multiple providers
+- **File Storage**: AWS S3 / Cloudinary
+- **Caching**: Redis for performance
+- **Search**: Algolia for advanced search capabilities
+
+### DevOps & Tools
+- **Build System**: Turborepo for monorepo management
+- **Testing**: Jest & React Testing Library
+- **CI/CD**: GitHub Actions
+- **Monitoring**: Sentry for error tracking
+- **Analytics**: Vercel Analytics
+- **Type Safety**: TypeScript for all packages
+
+## 📁 Project Structure
+
+```bash
+edulab-atlas/
+├── apps/
+│   ├── web/                 # Main Next.js application
+│   │   ├── app/            # App router pages
+│   │   ├── components/     # React components
+│   │   ├── lib/           # Utility functions
+│   │   └── styles/        # Global styles
+│   └── docs/              # Documentation site
+├── packages/
+│   ├── auth/              # Authentication utilities
+│   │   ├── src/
+│   │   └── tests/
+│   ├── config/            # Shared configuration
+│   │   ├── eslint/
+│   │   └── typescript/
+│   ├── db/               # Database utilities
+│   │   ├── prisma/
+│   │   └── migrations/
+│   ├── ui/               # Shared UI components
+│   │   ├── components/
+│   │   └── styles/
+│   ├── utils/            # Common utilities
+│   │   ├── src/
+│   │   └── tests/
+│   └── types/            # Shared TypeScript types
+└── tooling/              # Development tools
 ```
 
-## What's inside?
+## 🛠️ Development
 
-This Turborepo includes the following packages/apps:
+### Prerequisites
 
-### Apps and Packages
+- Node.js 18+ (LTS recommended)
+- npm 10+ or pnpm 8+
+- PostgreSQL 14+
+- Redis (optional, for caching)
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+### Environment Setup
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
-
-### Utilities
-
-This Turborepo has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
-
-### Build
-
-To build all apps and packages, run the following command:
-
-```
-cd my-turborepo
-pnpm build
+1. **Clone the repository**
+```bash
+git clone https://github.com/yourusername/edulab-atlas.git
+cd edulab-atlas
 ```
 
-### Develop
-
-To develop all apps and packages, run the following command:
-
-```
-cd my-turborepo
-pnpm dev
+2. **Install dependencies**
+```bash
+npm install
+# or with pnpm
+pnpm install
 ```
 
-### Remote Caching
+3. **Environment Variables**
+```bash
+# Copy environment variables
+cp packages/config/env.example .env
 
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
-
-Turborepo can use a technique known as [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
-
-```
-cd my-turborepo
-npx turbo login
+# Configure your .env file with:
+DATABASE_URL=
+NEXTAUTH_SECRET=
+NEXT_PUBLIC_APP_URL=
+# ... other variables
 ```
 
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
+4. **Database Setup**
+```bash
+# Generate Prisma Client
+npm run db:generate
 
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
+# Run migrations
+npm run db:migrate
 ```
-npx turbo link
+
+5. **Start Development Server**
+```bash
+npm run dev
 ```
 
-## Useful Links
+## 📜 Available Scripts
 
-Learn more about the power of Turborepo:
+### Root Directory
+- `npm run dev` - Start all applications in development mode
+- `npm run build` - Build all applications and packages
+- `npm run start` - Start all applications in production mode
+- `npm run lint` - Run ESLint across all projects
+- `npm run format` - Format code with Prettier
+- `npm run clean` - Clean all build outputs
+- `npm run test` - Run all tests
+- `npm run typecheck` - Type check all projects
 
-- [Tasks](https://turborepo.com/docs/crafting-your-repository/running-tasks)
-- [Caching](https://turborepo.com/docs/crafting-your-repository/caching)
-- [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching)
-- [Filtering](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters)
-- [Configuration Options](https://turborepo.com/docs/reference/configuration)
-- [CLI Usage](https://turborepo.com/docs/reference/command-line-reference)
+### Database
+- `npm run db:generate` - Generate Prisma Client
+- `npm run db:migrate` - Run database migrations
+- `npm run db:seed` - Seed database with initial data
+- `npm run db:studio` - Open Prisma Studio
+
+## 🧪 Testing
+
+We use Jest and React Testing Library for testing. Run tests with:
+
+```bash
+# Run all tests
+npm run test
+
+# Run tests in watch mode
+npm run test:watch
+
+# Run tests with coverage
+npm run test:coverage
+```
+
+## 📦 Deployment
+
+The project is configured for deployment on Vercel:
+
+1. Push your changes to GitHub
+2. Connect your repository to Vercel
+3. Configure environment variables
+4. Deploy!
+
+## 🤝 Contributing
+
+We welcome contributions! Please follow these steps:
+
+1. Fork the repository
+2. Create a feature branch
+3. Commit your changes
+4. Push to your fork
+5. Submit a pull request
+
+Please read our [Contributing Guide](CONTRIBUTING.md) for more details.
+
+## 📝 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- All our contributors and supporters
+- The amazing open-source community
+- Moroccan students who inspire us
+
+**Built with ❤️ in Morocco for Moroccan Students**
+
+---
+
+For more information, visit our [documentation](https://docs.edulab-atlas.com).
