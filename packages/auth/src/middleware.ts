@@ -1,58 +1,55 @@
-import { authMiddleware } from "@clerk/nextjs/server";
-import type { AuthObject } from "@clerk/nextjs/server";
-import { NextResponse } from "next/server";
-import type { UserRole } from "@edulab-atlas/types";
+import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server'
+import { NextResponse } from 'next/server'
 
-// Define routes that don't require authentication
-const publicRoutes = [
-    "/",
-    "/login*",
-    "/sign-up*",
-    "/api/webhook/clerk",
-];
+type Role = 'admin' | 'teacher' | 'student' | 'guest'
 
-// Define role-based route access
-const roleRoutes: Record<UserRole, string[]> = {
-    admin: ["/admin*", "/dashboard*"],
-    teacher: ["/dashboard*", "/courses*"],
-    student: ["/dashboard*", "/courses*", "/assignments*"],
-    guest: ["/courses/preview*"]
-};
+const isPublicRoute = createRouteMatcher([
+  '/',
+  '/sign-in/:path*',
+  '/sign-up/:path*',
+  '/api/webhook/clerk'
+])
 
-export default authMiddleware({
-    publicRoutes,
-    afterAuth: (auth: AuthObject, req) => {
-        // Handle public routes
-        if (publicRoutes.some(route =>
-            req.nextUrl.pathname.match(new RegExp(`^${route.replace('*', '.*')}$`)))) {
-            return NextResponse.next();
-        }
+const isAdminRoute = createRouteMatcher(['/admin/:path*'])
+const isDashboardRoute = createRouteMatcher(['/dashboard/:path*'])
+const isTeacherRoute = createRouteMatcher(['/courses/:path*'])
+const isStudentRoute = createRouteMatcher(['/assignments/:path*'])
 
-        // If the user is not signed in and the route is not public, redirect to sign-in
-        if (!auth.userId) {
-            const signInUrl = new URL('/sign-in', req.url);
-            signInUrl.searchParams.set('redirect_url', req.url);
-            return NextResponse.redirect(signInUrl);
-        }
+export default clerkMiddleware(async (auth, request) => {
+  if (isPublicRoute(request)) {
+    return NextResponse.next()
+  }
 
-        // Get user's role from public metadata
-        const metadata = auth.sessionClaims?.publicMetadata as { role?: UserRole } | undefined;
-        const role = metadata?.role || 'guest';
+  const { userId, sessionClaims, redirectToSignIn } = await auth()
 
-        // Check if user has access to the requested route
-        const hasAccess = roleRoutes[role]?.some(route =>
-            req.nextUrl.pathname.match(new RegExp(`^${route.replace('*', '.*')}$`)));
+  if (!userId) {
+    return redirectToSignIn({ returnBackUrl: request.url })
+  }
 
-        if (!hasAccess) {
-            // Redirect to dashboard or show unauthorized page
-            return NextResponse.redirect(new URL('/unauthorized', req.url));
-        }
+  const role = (sessionClaims?.metadata as { role: Role })?.role || 'guest'
 
-        return NextResponse.next();
-    },
-});
+  if (isAdminRoute(request) && role !== 'admin') {
+    return NextResponse.redirect(new URL('/unauthorized', request.url))
+  }
 
-// Specify which routes to run the middleware on
+  if (isDashboardRoute(request) && !['admin', 'teacher', 'student'].includes(role)) {
+    return NextResponse.redirect(new URL('/unauthorized', request.url))
+  }
+
+  if (isTeacherRoute(request) && !['admin', 'teacher'].includes(role)) {
+    return NextResponse.redirect(new URL('/unauthorized', request.url))
+  }
+
+  if (isStudentRoute(request) && !['admin', 'teacher', 'student'].includes(role)) {
+    return NextResponse.redirect(new URL('/unauthorized', request.url))
+  }
+
+  return NextResponse.next()
+})
+
 export const config = {
-    matcher: ["/((?!.+\\.[\\w]+$|_next).*)", "/", "/(api|trpc)(.*)"],
-};
+  matcher: [
+    '/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
+    '/(api|trpc)(.*)',
+  ],
+}

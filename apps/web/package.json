@@ -1,5 +1,5 @@
 {
-  "name": "web",
+  "name": "@edulab-atlas/web",
   "version": "0.1.0",
   "type": "module",
   "private": true,
@@ -11,18 +11,22 @@
     "check-types": "tsc --noEmit"
   },
   "dependencies": {
-    "@repo/ui": "*",
-    "next": "^15.3.0",
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0"
+    "@clerk/nextjs": "^4.29.0",
+    "@edulab-atlas/auth": "*",
+    "@edulab-atlas/ui": "*",
+    "@edulab-atlas/utils": "*",
+    "next": "14.0.4",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@repo/eslint-config": "*",
-    "@repo/typescript-config": "*",
-    "@types/node": "^22.15.3",
-    "@types/react": "19.1.0",
-    "@types/react-dom": "19.1.1",
-    "eslint": "^9.27.0",
-    "typescript": "5.8.2"
+    "@edulab-atlas/typescript-config": "*",
+    "@types/node": "^20.0.0",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "autoprefixer": "^10.0.0",
+    "postcss": "^8.0.0",
+    "tailwindcss": "^3.3.0",
+    "typescript": "^5.0.0"
   }
 }

@@ -1,5 +1,5 @@
 import { useAuth as useClerkAuth, useUser } from "@clerk/nextjs";
-import type { UserRole, UserSession } from "@edulab-atlas/types";
+import type { UserRole, BaseUser } from "@edulab-atlas/types";
 
 export const useAuth = () => {
     const { isLoaded, userId, sessionId } = useClerkAuth();
@@ -7,13 +7,15 @@ export const useAuth = () => {
 
     const role = user?.publicMetadata?.role as UserRole || "guest";
 
-    const session: UserSession | null = user ? {
+    const session: BaseUser | null = user ? {
         id: userId || "",
         email: user.primaryEmailAddress?.emailAddress || "",
         role,
         firstName: user.firstName || undefined,
         lastName: user.lastName || undefined,
         imageUrl: user.imageUrl || undefined,
+        createdAt: user.createdAt ? new Date(user.createdAt) : new Date(),
+        updatedAt: user.updatedAt ? new Date(user.updatedAt) : new Date()
     } : null;
 
     return {

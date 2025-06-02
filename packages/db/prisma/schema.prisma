@@ -19,10 +19,15 @@ enum Language {
   FR
 }
 
+// Amélioration : Streams plus spécifiques au Maroc
 enum Stream {
-  SCIENCE
-  ARTS
-  COMMERCE
+  SM          // Sciences Mathématiques
+  PC          // Physique Chimie  
+  SVT         // Sciences de la Vie et de la Terre
+  SE          // Sciences Économiques
+  LH          // Lettres et Humanités
+  ARTS        // Arts Appliqués
+  STI         // Sciences et Technologies Industrielles
 }
 
 enum Difficulty {
@@ -31,17 +36,59 @@ enum Difficulty {
   ADVANCED
 }
 
+// Amélioration : Ajout de nouveaux enums
+enum QuestionType {
+  MCQ            // Multiple Choice
+  TRUE_FALSE
+  SHORT_ANSWER
+  ESSAY
+  DRAG_DROP
+  MATCHING
+  FILL_BLANK
+}
+
+enum LabType {
+  CHEMISTRY
+  PHYSICS
+  BIOLOGY
+  MATHEMATICS
+}
+
 model User {
   id               String         @id @default(cuid())
   email            String         @unique
+  clerkId          String?        @unique // Ajout pour Clerk
   role             UserRole       @default(STUDENT)
-  grade            Int?
-  preferredLanguage Language      @default(EN)
+  
+  // Informations personnelles
+  firstName        String?
+  lastName         String?
+  avatar           String?
+  phone            String?
+  
+  // Informations académiques
+  grade            Int?           // 1ère ou 2ème année bac
+  preferredLanguage Language      @default(FR) // Maroc = français par défaut
   stream           Stream?
+  
+  // Gamification - Ajouts
+  xpPoints         Int            @default(0)
+  level            Int            @default(1)
+  streak           Int            @default(0)
+  lastLoginAt      DateTime?
+  
   createdAt        DateTime       @default(now())
   updatedAt        DateTime       @updatedAt
+  
+  // Relations
   progress         UserProgress[]
   quizAttempts     QuizAttempt[]
+  labSessions      LabSession[]   // Nouveau : Sessions de laboratoire 3D
+  achievements     UserAchievement[] // Nouveau : Système d'achievements
+  teacherClasses   Class[]        @relation("TeacherClasses") // Nouveau
+  studentClasses   ClassStudent[] // Nouveau
+  
+  @@map("users")
 }
 
 model Subject {
@@ -50,10 +97,17 @@ model Subject {
   nameAr      String
   nameFr      String
   description String?  @db.Text
+  descriptionAr String? @db.Text // Ajout
+  descriptionFr String? @db.Text // Ajout
+  icon        String?  // Ajout : Icône du sujet
+  color       String?  // Ajout : Couleur thématique
   order       Int
+  isActive    Boolean  @default(true) // Ajout : Activer/désactiver
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   lessons     Lesson[]
+  
+  @@map("subjects")
 }
 
 model Lesson {
@@ -62,15 +116,28 @@ model Lesson {
   titleAr     String
   titleFr     String
   content     Json
+  contentAr   Json?          // Ajout : Contenu en arabe
+  contentFr   Json?          // Ajout : Contenu en français
+  
   subjectId   String
   difficulty  Difficulty     @default(BEGINNER)
   duration    Int           // in minutes
   order       Int
+  
+  // Nouveaux champs
+  thumbnail   String?        // Image de couverture
+  videoUrl    String?        // URL vidéo explicative
+  isPublished Boolean        @default(false)
+  prerequisites String[]     // IDs des leçons prérequises
+  
   createdAt   DateTime       @default(now())
   updatedAt   DateTime       @updatedAt
   subject     Subject        @relation(fields: [subjectId], references: [id], onDelete: Cascade)
   progress    UserProgress[]
   quiz        Quiz?
+  labExperiments LabExperiment[] // Nouveau : Expériences 3D liées
+  
+  @@map("lessons")
 }
 
 model Quiz {
@@ -80,59 +147,86 @@ model Quiz {
   titleAr     String
   titleFr     String
   description String?        @db.Text
+  descriptionAr String?      @db.Text // Ajout
+  descriptionFr String?      @db.Text // Ajout
+  
   timeLimit   Int?          // in minutes
+  passingScore Int          @default(60) // Ajout : Score minimum
+  maxAttempts Int?         // Ajout : Limite de tentatives
+  isActive    Boolean      @default(true)
+  
   createdAt   DateTime       @default(now())
   updatedAt   DateTime       @updatedAt
   lesson      Lesson         @relation(fields: [lessonId], references: [id], onDelete: Cascade)
   questions   Question[]
   attempts    QuizAttempt[]
+  
+  @@map("quizzes")
 }
 
 model Question {
   id          String         @id @default(cuid())
   quizId      String
-  type        String        // MCQ, TrueFalse, ShortAnswer, etc.
+  type        QuestionType   // Utilisation de l'enum au lieu de String
   question    String        @db.Text
   questionAr  String        @db.Text
   questionFr  String        @db.Text
   options     Json?         // Array of options for MCQ
-  answer      String        @db.Text
+  answer      Json          // Changé en Json pour supporter différents types
   points      Int           @default(1)
   explanation String?       @db.Text
+  explanationAr String?     @db.Text // Ajout
+  explanationFr String?     @db.Text // Ajout
   order       Int
+  
+  // Nouveaux champs
+  imageUrl    String?       // Image pour la question
+  difficulty  Difficulty    @default(BEGINNER)
+  
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
   quiz        Quiz          @relation(fields: [quizId], references: [id], onDelete: Cascade)
   responses   Response[]
+  
+  @@map("questions")
 }
 
 model QuizAttempt {
   id        String     @id @default(cuid())
   userId    String
   quizId    String
-  score     Int
+  score     Float      // Changé en Float pour plus de précision
+  maxScore  Int        // Ajout : Score maximum possible
   startedAt DateTime   @default(now())
   endedAt   DateTime?
+  timeSpent Int?       // Ajout : Temps passé en secondes
+  completed Boolean    @default(false) // Ajout
+  
   responses Response[]
   user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   quiz      Quiz       @relation(fields: [quizId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@index([quizId])
+  @@index([completed]) // Nouvel index
+  @@map("quiz_attempts")
 }
 
 model Response {
   id            String      @id @default(cuid())
   attemptId     String
   questionId    String
-  answer        String      @db.Text
+  answer        Json        // Changé en Json pour flexibilité
   isCorrect     Boolean
   points        Int
+  timeSpent     Int?        // Ajout : Temps sur cette question
+  
   attempt       QuizAttempt @relation(fields: [attemptId], references: [id], onDelete: Cascade)
   question      Question    @relation(fields: [questionId], references: [id], onDelete: Cascade)
 
   @@index([attemptId])
   @@index([questionId])
+  @@map("responses")
 }
 
 model UserProgress {
@@ -140,7 +234,12 @@ model UserProgress {
   userId    String
   lessonId  String
   completed Boolean  @default(false)
-  progress  Int      @default(0)
+  progress  Int      @default(0) // Pourcentage 0-100
+  
+  // Nouveaux champs
+  timeSpent Int      @default(0) // Temps total en minutes
+  lastAccessedAt DateTime? // Dernière consultation
+  
   startedAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -149,4 +248,119 @@ model UserProgress {
   @@unique([userId, lessonId])
   @@index([userId])
   @@index([lessonId])
-} 
+  @@index([completed]) // Nouvel index
+  @@map("user_progress")
+}
+
+// NOUVEAUX MODÈLES pour les fonctionnalités avancées
+
+// Laboratoires 3D
+model LabExperiment {
+  id          String      @id @default(cuid())
+  title       String
+  titleAr     String?
+  titleFr     String?
+  description String?     @db.Text
+  type        LabType
+  lessonId    String?
+  sceneData   Json        // Configuration 3D stockée en JSON
+  duration    Int?        // Durée estimée en minutes
+  difficulty  Difficulty  @default(BEGINNER)
+  isActive    Boolean     @default(true)
+  
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  lesson      Lesson?     @relation(fields: [lessonId], references: [id])
+  sessions    LabSession[]
+  
+  @@map("lab_experiments")
+}
+
+// Sessions de laboratoire utilisateur
+model LabSession {
+  id           String        @id @default(cuid())
+  userId       String
+  experimentId String
+  sessionData  Json          // État de la session sauvegardé
+  completed    Boolean       @default(false)
+  score        Int?          // Score obtenu si applicable
+  timeSpent    Int           @default(0) // en minutes
+  
+  startedAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  experiment   LabExperiment @relation(fields: [experimentId], references: [id], onDelete: Cascade)
+  
+  @@index([userId])
+  @@index([experimentId])
+  @@map("lab_sessions")
+}
+
+// Système d'achievements/badges
+model Achievement {
+  id          String @id @default(cuid())
+  name        String
+  nameAr      String?
+  nameFr      String?
+  description String @db.Text
+  descriptionAr String? @db.Text
+  descriptionFr String? @db.Text
+  icon        String
+  xpReward    Int    @default(0)
+  condition   Json   // Conditions pour débloquer
+  isActive    Boolean @default(true)
+  
+  createdAt   DateTime @default(now())
+  users       UserAchievement[]
+  
+  @@map("achievements")
+}
+
+model UserAchievement {
+  id            String      @id @default(cuid())
+  userId        String
+  achievementId String
+  unlockedAt    DateTime    @default(now())
+  
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  achievement   Achievement @relation(fields: [achievementId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, achievementId])
+  @@index([userId])
+  @@map("user_achievements")
+}
+
+// Gestion des classes (pour les enseignants)
+model Class {
+  id          String         @id @default(cuid())
+  name        String
+  description String?        @db.Text
+  grade       Int
+  stream      Stream
+  teacherId   String
+  isActive    Boolean        @default(true)
+  
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  teacher     User           @relation("TeacherClasses", fields: [teacherId], references: [id], onDelete: Cascade)
+  students    ClassStudent[]
+  
+  @@index([teacherId])
+  @@map("classes")
+}
+
+model ClassStudent {
+  id        String   @id @default(cuid())
+  classId   String
+  studentId String
+  joinedAt  DateTime @default(now())
+  isActive  Boolean  @default(true)
+  
+  class     Class    @relation(fields: [classId], references: [id], onDelete: Cascade)
+  student   User     @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  
+  @@unique([classId, studentId])
+  @@index([classId])
+  @@index([studentId])
+  @@map("class_students")
+}
