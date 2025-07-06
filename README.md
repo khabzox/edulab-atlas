@@ -4,14 +4,18 @@ A modern educational platform built for Moroccan students, providing a comprehen
 
 ## ✨ Features
 
-- 📚 **Rich Content Management**: Support for various educational content types
-- 🔍 **Smart Search**: Advanced search functionality for educational resources
-- 👥 **User Profiles**: Customizable student and teacher profiles
-- 📊 **Progress Tracking**: Detailed learning progress analytics
-- 💬 **Interactive Learning**: Real-time collaboration tools
-- 📱 **Responsive Design**: Works seamlessly on all devices
-- 🌙 **Dark Mode**: Eye-friendly dark theme support
-- 🔐 **Secure Authentication**: Robust user authentication system
+- 🧪 **Immersive 3D Labs**: Virtual experiments with React Three Fiber for Physics, Chemistry, and Biology
+- 📚 **Curriculum-Aligned Content**: All content follows official Moroccan Baccalaureate curriculum
+- 🎯 **Multi-Track Support**: Sciences Mathématiques (SM), Sciences Physiques (SP), SVT, Sciences Humaines (SH), Sciences Économiques (SE), and Arts & Literature (AL)
+- 🤖 **AI-Powered Tutoring**: Personalized learning assistance with OpenAI integration
+- 🔍 **Smart Search**: Advanced content discovery with semantic search capabilities
+- 👥 **Role-Based Access**: Differentiated experiences for students, teachers, and administrators
+- 📊 **Progress Analytics**: Detailed learning progress tracking and performance insights
+- 🏆 **Gamification**: XP system, achievements, and leaderboards to motivate learning
+- 💬 **Collaborative Learning**: Real-time collaboration tools and shared lab experiences
+- 📱 **Responsive Design**: Seamless experience across desktop, tablet, and mobile devices
+- � **Multilingual Support**: French, Arabic, and English with RTL support for Arabic
+- 🌙 **Dark Mode**: Eye-friendly interface with system preference detection
 
 ## 🚀 Tech Stack
 
@@ -25,50 +29,65 @@ A modern educational platform built for Moroccan students, providing a comprehen
 - **Animations**: Framer Motion
 
 ### Backend
-- **API**: Next.js API Routes & tRPC
-- **Database**: Prisma with PostgreSQL
-- **Authentication**: NextAuth.js with multiple providers
-- **File Storage**: AWS S3 / Cloudinary
-- **Caching**: Redis for performance
-- **Search**: Algolia for advanced search capabilities
+- **API**: Next.js API Routes & tRPC for type-safe APIs
+- **Database**: Supabase (PostgreSQL) with Prisma ORM
+- **Dynamic Data**: MongoDB Atlas for flexible schemas (3D scenes, AI chats)
+- **Graph Database**: Neo4j/ArangoDB for topic relationships & learning paths
+- **Authentication**: Clerk with role-based access control
+- **File Storage**: Supabase Storage / AWS S3 for media assets
+- **Caching**: Redis (Upstash) for real-time state & performance
+- **Search**: Meilisearch / Algolia for content indexing
+- **AI Services**: OpenAI API for tutoring, flashcards, summaries
 
 ### DevOps & Tools
 - **Build System**: Turborepo for monorepo management
 - **Testing**: Jest & React Testing Library
 - **CI/CD**: GitHub Actions
 - **Monitoring**: Sentry for error tracking
-- **Analytics**: Vercel Analytics
+- **Analytics**: PostHog or Plausible
 - **Type Safety**: TypeScript for all packages
 
 ## 📁 Project Structure
 
 ```bash
 edulab-atlas/
-├── apps/
-│   ├── web/                 # Main Next.js application
-│   │   ├── app/            # App router pages
-│   │   ├── components/     # React components
-│   │   ├── lib/           # Utility functions
-│   │   └── styles/        # Global styles
-│   └── docs/              # Documentation site
-├── packages/
-│   ├── auth/              # Authentication utilities
-│   │   ├── src/
-│   │   └── tests/
-│   ├── config/            # Shared configuration
-│   │   ├── eslint/
-│   │   └── typescript/
-│   ├── db/               # Database utilities
-│   │   ├── prisma/
-│   │   └── migrations/
-│   ├── ui/               # Shared UI components
-│   │   ├── components/
-│   │   └── styles/
-│   ├── utils/            # Common utilities
-│   │   ├── src/
-│   │   └── tests/
-│   └── types/            # Shared TypeScript types
-└── tooling/              # Development tools
+├── apps/                          # Each app is a user-facing entrypoint
+│   ├── web/                       # Student/teacher portal (Next.js)
+│   ├── admin/                     # Admin dashboard (analytics, moderation)
+│   ├── api/                       # API gateway (Next.js API routes or tRPC)
+│   ├── ai-service/                # OpenAI-powered service (optional server)
+│   ├── lab-editor/                # 3D lab workspace (React Three Fiber)
+│   ├── docs/                      # Documentation site
+│   ├── mobile/                    # Future React Native app (optional)
+│   └── blog/                      # Blog feature (CRUD operations for posts)
+├── packages/                      # Shared, composable building blocks
+│   ├── ui/                        # Design system: shadcn/ui + Tailwind
+│   ├── types/                     # Global TS types (lessons, users, blog posts, etc.)
+│   ├── config/                    # App-wide constants, env, i18n settings
+│   ├── db/                        # Prisma setup for Supabase (PostgreSQL)
+│   ├── mongo/                     # MongoDB connection + lab scene logic
+│   ├── graph/                     # GraphDB adapter (Neo4j or ArangoDB)
+│   ├── auth/                      # Clerk helpers, roles, middlewares
+│   ├── hooks/                     # Shared React hooks (useAuth, useUser)
+│   ├── utils/                     # General utility functions
+│   ├── prompts/                   # AI prompts for tutoring, flashcards
+│   ├── content/                   # Curriculum metadata, subject trees
+│   └── blog/                      # Blog post components, utilities, API helpers
+├── infra/                         # Infrastructure configs
+│   ├── docker/                    # Docker configs for local dev
+│   ├── vercel/                    # Vercel deployment settings
+│   ├── railway/                   # Backend deployment (API, db)
+│   └── scripts/                   # CI/CD, seeding, backups
+├── @rules/                        # Project rules and guidelines
+│   ├── project-rules.md           # Core development rules
+│   ├── technical-architecture.md  # Technical architecture guidelines
+│   └── bac-curriculum-features.md # Complete feature requirements by BAC major
+├── public/                        # Global assets (images, fonts, icons, etc.)
+├── .env                           # Global env variables
+├── turbo.json                     # Turborepo pipeline config
+├── tsconfig.base.json             # Base TypeScript config
+├── package.json                   # Project dependencies & scripts
+└── README.md                      # Project documentation
 ```
 
 ## 🛠️ Development
