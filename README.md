@@ -64,9 +64,11 @@ edulab-atlas/
 │   ├── ui/                        # Design system: shadcn/ui + Tailwind
 │   ├── types/                     # Global TS types (lessons, users, blog posts, etc.)
 │   ├── config/                    # App-wide constants, env, i18n settings
-│   ├── db/                        # Prisma setup for Supabase (PostgreSQL)
-│   ├── mongo/                     # MongoDB connection + lab scene logic
-│   ├── graph/                     # GraphDB adapter (Neo4j or ArangoDB)
+│   ├── db/                        # Unified database package
+│   │   ├── prisma/               # Prisma setup for Supabase (PostgreSQL)
+│   │   ├── mongodb/              # MongoDB connection + schemas
+│   │   ├── graph/                # GraphDB adapter (Neo4j or ArangoDB)
+│   │   └── redis/                # Redis connection + caching utilities
 │   ├── auth/                      # Clerk helpers, roles, middlewares
 │   ├── hooks/                     # Shared React hooks (useAuth, useUser)
 │   ├── utils/                     # General utility functions

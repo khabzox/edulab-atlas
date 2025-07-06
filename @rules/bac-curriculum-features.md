@@ -5,7 +5,9 @@
 ### 📚 **Sciences Mathématiques (SM) - Mathematical Sciences**
 
 #### Core Mathematics Features
+
 - **Algebra & Analysis**
+
   - 3D function visualization with React Three Fiber
   - Interactive equation solver with step-by-step solutions
   - Complex number operations with visual representations
@@ -14,6 +16,7 @@
   - Derivative and integral calculators with geometric interpretations
 
 - **Geometry & Trigonometry**
+
   - 3D geometric shape manipulation and measurement
   - Trigonometric function visualizations on unit circle
   - Analytic geometry with coordinate system interactions
@@ -28,7 +31,9 @@
   - Regression analysis with real data sets
 
 #### Physics Components
+
 - **Mechanics**
+
   - 3D projectile motion simulators
   - Force vector analysis with interactive diagrams
   - Energy conservation demonstrations
@@ -43,6 +48,7 @@
   - AC/DC circuit analysis with oscilloscope
 
 #### Chemistry Basics
+
 - **Atomic Structure**
   - 3D atomic orbital visualizations
   - Periodic table interactive explorer
@@ -54,7 +60,9 @@
 ### 🧪 **Sciences Physiques (SP) - Physical Sciences**
 
 #### Advanced Physics Features
+
 - **Thermodynamics**
+
   - Gas law simulations with molecular motion
   - Heat transfer demonstrations
   - Phase transition visualizations
@@ -62,6 +70,7 @@
   - Entropy and energy distribution models
 
 - **Optics & Waves**
+
   - Ray tracing simulations
   - Interference and diffraction patterns
   - Lens and mirror calculators
@@ -76,7 +85,9 @@
   - Particle physics interactions
 
 #### Advanced Chemistry
+
 - **Organic Chemistry**
+
   - 3D molecular structure builders
   - Reaction mechanism animations
   - Functional group identifier
@@ -91,6 +102,7 @@
   - Thermochemistry calculations
 
 #### Advanced Mathematics
+
 - **Differential Equations**
   - Solution visualization tools
   - Phase portrait generators
@@ -102,7 +114,9 @@
 ### 🌱 **Sciences de la Vie et de la Terre (SVT) - Life and Earth Sciences**
 
 #### Biology Features
+
 - **Cell Biology**
+
   - 3D cell structure explorers
   - Mitosis and meiosis animations
   - DNA replication simulators
@@ -110,6 +124,7 @@
   - Enzyme kinetics models
 
 - **Genetics**
+
   - Punnett square calculators
   - Gene expression simulators
   - Inheritance pattern trackers
@@ -117,6 +132,7 @@
   - Genetic engineering scenarios
 
 - **Ecology & Evolution**
+
   - Population dynamics models
   - Food web builders
   - Natural selection simulators
@@ -131,7 +147,9 @@
   - Neuron signaling demonstrations
 
 #### Earth Sciences
+
 - **Geology**
+
   - Rock cycle simulators
   - Plate tectonics models
   - Earthquake wave propagation
@@ -150,7 +168,9 @@
 ### 📖 **Sciences Humaines (SH) - Humanities**
 
 #### Philosophy Features
+
 - **Logic & Reasoning**
+
   - Argument structure analyzers
   - Logical fallacy identifiers
   - Syllogism builders
@@ -164,7 +184,9 @@
   - Philosophical text analyzers
 
 #### History Features
+
 - **Interactive Timelines**
+
   - Moroccan history explorer
   - World history synchronizer
   - Event correlation tools
@@ -178,7 +200,9 @@
   - Archaeological site explorers
 
 #### Geography Features
+
 - **Physical Geography**
+
   - 3D terrain modeling
   - Climate zone mappers
   - Natural disaster simulators
@@ -197,7 +221,9 @@
 ### 🌍 **Sciences Économiques (SE) - Economic Sciences**
 
 #### Economics Features
+
 - **Microeconomics**
+
   - Supply and demand simulators
   - Market equilibrium calculators
   - Price elasticity demonstrators
@@ -212,7 +238,9 @@
   - Business cycle demonstrations
 
 #### Management & Accounting
+
 - **Financial Analysis**
+
   - Balance sheet builders
   - Profit/loss calculators
   - Investment return analyzers
@@ -230,7 +258,9 @@
 ### 🎨 **Arts & Literature (AL) - Arts and Literature**
 
 #### Literature Features
+
 - **Text Analysis**
+
   - Literary device identifiers
   - Character development trackers
   - Plot structure analyzers
@@ -245,7 +275,9 @@
   - Publishing simulators
 
 #### Art & Design
+
 - **Visual Arts**
+
   - Color theory demonstrators
   - Perspective drawing tools
   - Art history timelines
@@ -263,6 +295,7 @@
 ## 🛠️ **Universal Platform Features**
 
 ### Assessment & Evaluation
+
 - **Adaptive Testing**
   - Difficulty adjustment algorithms
   - Competency-based assessments
@@ -271,6 +304,7 @@
   - Performance analytics
 
 ### Collaboration Tools
+
 - **Virtual Classrooms**
   - Real-time collaboration spaces
   - Screen sharing capabilities
@@ -279,6 +313,7 @@
   - Peer review systems
 
 ### AI-Powered Learning
+
 - **Personalized Tutoring**
   - Subject-specific AI tutors
   - Learning style adaptation
@@ -287,6 +322,7 @@
   - Study plan generation
 
 ### Accessibility Features
+
 - **Multi-language Support**
   - Arabic, French, English interfaces
   - Voice-to-text capabilities
@@ -295,6 +331,7 @@
   - Motor disability accommodations
 
 ### Gamification Elements
+
 - **Achievement Systems**
   - Subject mastery badges
   - Learning streak rewards
@@ -307,6 +344,7 @@
 ## 📱 **Mobile-Responsive Features**
 
 ### Offline Capabilities
+
 - **Content Synchronization**
   - Offline lesson access
   - Progress synchronization
@@ -314,6 +352,7 @@
   - Cached assessments
 
 ### Touch Interactions
+
 - **3D Manipulation**
   - Touch-based 3D controls
   - Gesture recognition
@@ -325,6 +364,7 @@
 ## 🔗 **Integration Requirements**
 
 ### External Systems
+
 - **Ministry of Education APIs**
   - Official curriculum alignment
   - Grade reporting systems
@@ -332,6 +372,7 @@
   - Certification tracking
 
 ### Third-Party Tools
+
 - **Scientific Calculators**
   - Graphing calculator integration
   - Statistical software connections
